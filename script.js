@@ -31,7 +31,19 @@ divider.addEventListener('mousedown', (e) => {
     e.preventDefault();
 });
 
+// Touch support for divider on mobile
+divider.addEventListener('touchstart', (e) => {
+    isDragging = true;
+    divider.classList.add('dragging');
+    e.preventDefault();
+});
+
 window.addEventListener('mouseup', () => {
+    isDragging = false;
+    divider.classList.remove('dragging');
+});
+
+window.addEventListener('touchend', () => {
     isDragging = false;
     divider.classList.remove('dragging');
 });
@@ -43,6 +55,14 @@ window.addEventListener('mousemove', (e) => {
         hero.style.height = newHeight + 'px';
     }
 });
+
+window.addEventListener('touchmove', (e) => {
+    if(!isDragging) return;
+    const newHeight = e.touches[0].clientY;
+    if(newHeight > 100 && newHeight < window.innerHeight - 100){
+        hero.style.height = newHeight + 'px';
+    }
+}, { passive: false });
 
 // Smooth section animations on scroll
 const observerOptions = {
